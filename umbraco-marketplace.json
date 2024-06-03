@@ -1,0 +1,19 @@
+{
+  "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json",
+  "Title": "Umbraco AltTextAI Integration",
+  "AlternatePackageNames": [ "AltTextAI" ],
+  "AuthorDetails": {
+    "Name": "Joe Kepley",
+    "Description": "CTO",
+    "Url": "https://www.blendinteractive.com/about/team/joe-kepley/",
+    "ImageUrl": "https://www.blendinteractive.com/globalassets/images---bios/joe-bio-2024.png"
+  },
+  "Category": "Developer Tools",
+  "Description": "This package integrates the AltTextAI service to automatically fill in an alt text field on all uploaded images.",
+  "DocumentationUrl": "https://github.com/blendinteractive/Blend.Umbraco.AltTextAi/blob/main/README.md",
+  "IssueTrackerUrl": "https://github.com/blendinteractive/Blend.Umbraco.AltTextAi/issues",
+  "LicenseTypes": [ "Free" ],
+  "PackageType": "Package",
+  "PackagesByAuthor": [  ],
+  "Tags": [ "AI", "alt-text", "media", "images", "blend", "blend-interactive" ]
+}
