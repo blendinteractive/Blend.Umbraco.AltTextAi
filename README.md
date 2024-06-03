@@ -48,6 +48,13 @@ an alttext.ai account for this. A free trial is available.
 
 Once you have an account, the [AltText.AI documentation explains how to create an API Key](https://alttext.ai/docs/webui/account/#api-keys).
 
+After this is completed, restart your Umbraco instance. Whenever an image is uploaded,
+or an existing one without alt text is saved, you should see alt text added to the 
+field you specified within a few seconds. 
 
+You can edit the alt text manually if you wish. The AI will only generate text if 
+the field is blank.
+
+Note that each generation consumes a credit with the alttext.ai service!
 
 
