@@ -5,11 +5,5 @@
     "allowPackageTelemetry": true,
     "version": "1.0.0",
     "extensions": [
-        {
-          "name": "Blend.Umbraco.AltTextAi EntryPoint",
-          "alias": "blend.umbraco.alttextai.entrypoint",
-          "type": "backofficeEntryPoint",
-          "js": "/app_plugins/Blend.Umbraco.AltTextAi/blend.umbraco.alttextai.js"
-        }
       ]
 }
