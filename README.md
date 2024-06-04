@@ -40,7 +40,7 @@ Next, you'll need to add a section to your appsettings.json file to configure th
   }
 ```
 
-In the "ImageAltTextproperty" setting, add the alias for your alt text field you've just added. 
+In the "ImageAltTextProperty" setting, add the alias for your alt text field you've just added. 
 This is where the package will look for and write generated alt text.
 
 In the "AltTextAiApiKey" setting, add an API Key from your AltTextAI account. You'll need 
