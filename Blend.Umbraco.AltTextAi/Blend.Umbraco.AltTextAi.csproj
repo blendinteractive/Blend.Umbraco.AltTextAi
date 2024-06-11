@@ -4,20 +4,38 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <StaticWebAssetBasePath>App_Plugins/Blend.Umbraco.AltTextAi</StaticWebAssetBasePath>
+    <Copyright>©2024 Blend Interactive</Copyright>
+    <PackageProjectUrl>https://github.com/blendinteractive/Blend.Umbraco.AltTextAi</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/blendinteractive/Blend.Umbraco.AltTextAi</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>Blend Interactive, Joe Kepley</Authors>
+    <AssemblyOriginatorKeyFile>..\..\..\Downloads\codesign\cert.pem</AssemblyOriginatorKeyFile>
+    <AssemblyVersion>1.0.1</AssemblyVersion>
+    <FileVersion>1.0.1</FileVersion>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>Blend.Umbraco.AltTextAi</PackageId>
+    <PackageId>BlendInteractive.Umbraco.AltTextAi</PackageId>
     <Product>Blend.Umbraco.AltTextAi</Product>
-    <Title>Blend.Umbraco.AltTextAi</Title>
-    <Description>...</Description>
-    <PackageTags>umbraco plugin package</PackageTags>
+    <Title>Blend Umbraco AltText.AI Integration</Title>
+    <Description>Adds integration with the AltText.AI service to Umbraco, so uploaded images automatically receive generated alt text. </Description>
+    <PackageTags>umbraco ai alt umbraco-marketplace</PackageTags>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
 
   <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.4" />
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="14.0.0" />
-    <PackageReference Include="Umbraco.Cms.Web.Common" Version="14.0.0" />
+    <PackageReference Include="Umbraco.Cms.Core" Version="13.*-14.*" />
+    <PackageReference Include="Umbraco.Cms.Web.Common" Version="13.*-14.*" />
   </ItemGroup>
 </Project>

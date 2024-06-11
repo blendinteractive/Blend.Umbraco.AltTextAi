@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blend.Umbraco.AltTextAi.Umbraco14", "Blend.Umbraco.AltTextAi.Umbraco14\Blend.Umbraco.AltTextAi.Umbraco14.csproj", "{51EDFA4E-59DB-403F-9FC9-569A9F73B7A9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blend.Umbraco.AltTextAi", "Blend.Umbraco.AltTextAi\Blend.Umbraco.AltTextAi.csproj", "{DA31B54A-14D7-459B-8509-C3F784599FCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blend.Umbraco.AltTextAi.Umbraco13", "Blend.Umbraco.AltTextAi.Umbraco13\Blend.Umbraco.AltTextAi.Umbraco13.csproj", "{237A391E-A2B9-4C98-8EF3-41E5574EBB47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blend.Umbraco.AltTextAi.Umbraco14", "Blend.Umbraco.AltTextAi.Umbraco14\Blend.Umbraco.AltTextAi.Umbraco14.csproj", "{2A8FA0DE-4168-4E94-8F04-7A5978C0B203}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,13 +18,17 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{51EDFA4E-59DB-403F-9FC9-569A9F73B7A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{51EDFA4E-59DB-403F-9FC9-569A9F73B7A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{51EDFA4E-59DB-403F-9FC9-569A9F73B7A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{51EDFA4E-59DB-403F-9FC9-569A9F73B7A9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DA31B54A-14D7-459B-8509-C3F784599FCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DA31B54A-14D7-459B-8509-C3F784599FCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA31B54A-14D7-459B-8509-C3F784599FCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA31B54A-14D7-459B-8509-C3F784599FCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{237A391E-A2B9-4C98-8EF3-41E5574EBB47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{237A391E-A2B9-4C98-8EF3-41E5574EBB47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{237A391E-A2B9-4C98-8EF3-41E5574EBB47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{237A391E-A2B9-4C98-8EF3-41E5574EBB47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A8FA0DE-4168-4E94-8F04-7A5978C0B203}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A8FA0DE-4168-4E94-8F04-7A5978C0B203}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A8FA0DE-4168-4E94-8F04-7A5978C0B203}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A8FA0DE-4168-4E94-8F04-7A5978C0B203}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
