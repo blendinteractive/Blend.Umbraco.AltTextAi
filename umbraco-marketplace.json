@@ -4,7 +4,7 @@
   "AlternatePackageNames": [ "AltTextAI" ],
   "AuthorDetails": {
     "Name": "Joe Kepley",
-    "Description": "CTO",
+    "Description": "CTO, Blend Interactive",
     "Url": "https://www.blendinteractive.com/about/team/joe-kepley/",
     "ImageUrl": "https://www.blendinteractive.com/globalassets/images---bios/joe-bio-2024.png"
   },
@@ -15,5 +15,6 @@
   "LicenseTypes": [ "Free" ],
   "PackageType": "Package",
   "PackagesByAuthor": [  ],
-  "Tags": [ "AI", "alt-text", "media", "images", "blend", "blend-interactive" ]
+  "Tags": [ "AI", "alt-text", "media", "images", "blend", "blend-interactive" ],
+  "VideoUrl": "https://www.youtube.com/watch?v=I0XfMCV-vYU"
 }

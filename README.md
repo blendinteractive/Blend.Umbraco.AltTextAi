@@ -2,6 +2,7 @@
 -----
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![NuGet version (BlendInteractive.Umbraco.AltTextAi)](https://img.shields.io/nuget/v/Our.Umbraco.Blend.Sitemap.svg?style=flat-square)](https://www.nuget.org/packages/BlendInteractive.Umbraco.AltTextAi/)
 
 This is a simple package that integrates the [AltText.AI](https://alttext.ai) text generation 
 service with the Umbraco media library.
@@ -17,12 +18,12 @@ You can add the package to your Umbraco instance using either the command line o
 ---
 Command Line
 ```
-dotnet add package Our.Umbraco.Blend.AltTextAi
+dotnet add package BlendInteractive.Umbraco.AltTextAi
 ```
 
 Or Nuget
 ```
-Install-Package Our.Umbraco.Blend.AltTextAi
+Install-Package BlendInteractive.Umbraco.AltTextAi
 ```
 
 ## Configuration
