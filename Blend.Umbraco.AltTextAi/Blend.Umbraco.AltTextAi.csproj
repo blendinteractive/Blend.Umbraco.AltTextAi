@@ -14,7 +14,7 @@
     <AssemblyOriginatorKeyFile>..\..\..\Downloads\codesign\cert.pem</AssemblyOriginatorKeyFile>
     <AssemblyVersion>1.0.2</AssemblyVersion>
     <FileVersion>1.0.2</FileVersion>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -29,12 +29,12 @@
 
 
   <ItemGroup>
-    <None Include="..\README.md" Pack="true" PackagePath="\"/>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.4" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
     <PackageReference Include="Umbraco.Cms.Core" Version="13.*-14.*" />
     <PackageReference Include="Umbraco.Cms.Web.Common" Version="13.*-14.*" />
   </ItemGroup>
