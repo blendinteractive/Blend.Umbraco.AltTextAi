@@ -1,25 +1,20 @@
 using System.Net.Http.Headers;
 using System.Text;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Events;
-using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Infrastructure.HostedServices;
 using Umbraco.Cms.Infrastructure.Scoping;
-using Umbraco.Cms.Web.Common;
-using Umbraco.Extensions;
 using Image = SixLabors.ImageSharp.Image;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.PropertyEditors.ValueConverters;
 using JsonSerializer = System.Text.Json.JsonSerializer;
+using Microsoft.Extensions.Logging;
 
 namespace Blend.Umbraco.AltTextAi.Composing;
 
@@ -29,16 +24,22 @@ public class MediaSavedAltTextHandler: INotificationHandler<MediaSavedNotificati
     private readonly IBackgroundTaskQueue _backgroundTaskQueue;
     private readonly IScopeProvider _scopeProvider;
     private readonly IOptions<Configuration.AltTextAi> _options;
+    private readonly ILogger<MediaSavedAltTextHandler> _logger;
     private readonly AppCaches _appCaches;
     
     
-    public MediaSavedAltTextHandler(IMediaService mediaService, IBackgroundTaskQueue backgroundTaskQueue,
-        IScopeProvider scopeProvider, IOptions<Configuration.AltTextAi> options, AppCaches appCaches)
+    public MediaSavedAltTextHandler(IMediaService mediaService, 
+                                        IBackgroundTaskQueue backgroundTaskQueue,
+                                        IScopeProvider scopeProvider, 
+                                        IOptions<Configuration.AltTextAi> options, 
+                                        ILogger<MediaSavedAltTextHandler> logger, 
+                                        AppCaches appCaches)
     {
         _mediaService = mediaService;
         _backgroundTaskQueue = backgroundTaskQueue;
         _scopeProvider = scopeProvider;
         _options = options;
+        _logger = logger;
         _appCaches = appCaches;
 
     }
@@ -46,95 +47,116 @@ public class MediaSavedAltTextHandler: INotificationHandler<MediaSavedNotificati
     public void Handle(MediaSavedNotification notification)
     {
         var settings = _options.Value;
+
         foreach (var media in notification.SavedEntities)
         {
-            if (media.HasProperty(settings.ImageAltTextProperty))
+            if (!media.HasProperty(settings.ImageAltTextProperty))
             {
-                var altText = media.GetValue<string>(settings.ImageAltTextProperty);
-
-                if (altText.IsNullOrEmpty())
-                {
-                    _backgroundTaskQueue.QueueBackgroundWorkItem(cancellationToken => RequestAltTextGeneration(media.Key));
-                }
+                _logger.LogInformation($"Alt text property not found for media item {media.Name} ID {media.Id}");
+                continue;
             }
-        }        
+
+            var altText = media.GetValue<string>(settings.ImageAltTextProperty) ?? string.Empty;
+
+            if (altText.Length <= settings.AltTextLengthToSkip)
+            {
+                _backgroundTaskQueue.QueueBackgroundWorkItem(cancellationToken => RequestAltTextGeneration(media.Key));
+            }
+            else
+            {
+                _logger.LogInformation($"Alt text already exists for media item {media.Name} ID {media.Id}. Skipping alt text generation");
+            }
+        }
     }
 
     public async Task RequestAltTextGeneration(Guid mediaKey)
     {
-        var settings = _options.Value;
-        var media = _mediaService.GetById(mediaKey);
-        if (media == null)
+        try
         {
-            return; 
-        }
-        
-        var fileInfo = JsonConvert.DeserializeObject<ImageCropperValue>(media.GetValue<string>(Constants.Conventions.Media.File));
-        if (fileInfo.Src == null)
-        {
-            Console.WriteLine("No File URL");
-            return;
-        }
-        var stream = ResizeImage(_mediaService.GetMediaFileContentStream(fileInfo.Src));
-        
-        
-        using HttpClient client = new();
-        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        client.DefaultRequestHeaders.Add("X-API-Key", settings.AltTextAiApiKey);
+            var settings = _options.Value;
+            var media = _mediaService.GetById(mediaKey);
 
-        byte[] imgBytes = stream.ToArray();
-        
-        var request = new
-        {
-            image = new
+            if (media is null)
             {
-                raw = Convert.ToBase64String(imgBytes)
+                _logger.LogError($"Media item with key {mediaKey} not found");
+                return;
             }
-        };
-        
-        /* //URL-based processing. Preferable but less reliable in dev instances
-        IPublishedContent node = _helper.Media(media.Key);
-        var request = new
-        {
-            image = new
+
+            var file = media.GetValue<string>(Constants.Conventions.Media.File);
+            if (string.IsNullOrEmpty(file))
             {
-                url = node.Url()
+                _logger.LogError($"No file found for media item {media.Name} ID {media.Id}");
+                return;
             }
-        };
-        */
-        
-        var json = JsonSerializer.Serialize(request);
-        var data = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var url = "https://alttext.ai/api/v1/images";
-        
-        var response = await client.PostAsync(url, data);
-        
-        string responseBody = await response.Content.ReadAsStringAsync();
+            var fileInfo = JsonConvert.DeserializeObject<ImageCropperValue>(file);
+            if (string.IsNullOrEmpty(fileInfo?.Src))
+            {
+                _logger.LogError($"No File URL found for file {media.Name} ID {media.Id}");
+                return;
+            }
 
-        AltTextResponse result = JsonSerializer.Deserialize<AltTextResponse>(responseBody);
-        
-        if (response.IsSuccessStatusCode)
-        {
-            /* // Suppress notifications - causes cache issues in 14
-            using var scope = _scopeProvider.CreateScope(autoComplete: true);
-            using var _ = scope.Notifications.Suppress();
-            */
-            
+            using var stream = _mediaService.GetMediaFileContentStream(fileInfo.Src);
+            var imgBytes = ResizeImage(stream);
+
+            var requestPayload = new
+            {
+                image = new { raw = Convert.ToBase64String(imgBytes) },
+                keywords = settings.AltTextKeyWords
+            };
+
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Add("X-API-Key", settings.AltTextAiApiKey);
+
+            var response = await client.PostAsync(
+                "https://alttext.ai/api/v1/images",
+                new StringContent(JsonSerializer.Serialize(requestPayload), Encoding.UTF8, "application/json")
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError($"Failed to generate alt text for media item {media.Name} ID {media.Id}. Status Code: {response.StatusCode}");
+                return;
+            }
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+            if (string.IsNullOrEmpty(responseBody))
+            {
+                _logger.LogError($"Empty response from AltText.ai for media item {media.Name} ID {media.Id}");
+                return;
+            }
+
+            var result = JsonSerializer.Deserialize<AltTextResponse>(responseBody);
+            if (result is null)
+            {
+                _logger.LogError($"Invalid response from AltText.ai for media item {media.Name} ID {media.Id}");
+                return;
+            }
+
+            // unfortunately this raises a second save event, using .Suppress causes issues in v14+
             media.SetValue(settings.ImageAltTextProperty, result.alt_text);
             _mediaService.Save(media);
-            
+
+            // clear the cache for the media item so it is reloaded with the next request
             _appCaches.RuntimeCache.ClearByKey(media.Key.ToString());
+
+            _logger.LogInformation($"Alt text successfully generated for media item {media.Name} ID {media.Id}");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception in {nameof(RequestAltTextGeneration)}: {ex.Message}");
+            throw;
         }
     }
     
-    protected MemoryStream ResizeImage(Stream sourceImage)
+    protected static byte[] ResizeImage(Stream sourceImage)
     {
         var targetStream = new MemoryStream();
         Image srcImage = Image.Load(sourceImage);
         srcImage.Mutate(x=>x.Resize(1080, 0));
         srcImage.Save(targetStream, new JpegEncoder());
-        return targetStream;
+        return targetStream.ToArray();
     }       
 
 }

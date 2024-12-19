@@ -14,6 +14,7 @@ public class Composer : IComposer
         {
             builder.Config.GetSection(nameof(Configuration.AltTextAi)).Bind(options);
         });
+
         builder.AddNotificationHandler<MediaSavedNotification, MediaSavedAltTextHandler>();
     }
 }

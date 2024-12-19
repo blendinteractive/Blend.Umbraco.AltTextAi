@@ -37,7 +37,9 @@ Next, you'll need to add a section to your appsettings.json file to configure th
 ```json
   "AltTextAi": {
     "ImageAltTextProperty": "altText",
-    "AltTextAiApiKey": "<YOUR API KEY GOES HERE>"
+    "AltTextAiApiKey": "<YOUR API KEY GOES HERE>",
+    "AltTextLengthToSkip": 0,
+    "AltTextKeyWords": []
   }
 ```
 
@@ -46,6 +48,13 @@ This is where the package will look for and write generated alt text.
 
 In the "AltTextAiApiKey" setting, add an API Key from your AltTextAI account. You'll need 
 an alttext.ai account for this. A free trial is available. 
+
+The "AltTextLengthToSkip" setting allows you to skip generating alt text for media items where
+the alt text is longer than the specified length. Set to 0 to skip generating alt text when the field is not empty.
+This can be useful if you have manually added alt text to some media items and don't want to overwrite it.
+
+The "AltTextKeyWords" setting allows you to specify keywords that will be used to give SEO context to
+AltText.ai when generating the alt text. You can specify up to 6 keywords in the string array.
 
 Once you have an account, the [AltText.AI documentation explains how to create an API Key](https://alttext.ai/docs/webui/account/#api-keys).
 
